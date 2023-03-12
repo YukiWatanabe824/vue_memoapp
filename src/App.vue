@@ -4,47 +4,53 @@ import { ref } from "vue";
 const STORAGE_KEY = "memo-app";
 
 let memos = ref(JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"));
-let editedMemo2 = ref({});
+let editedMemo = ref({});
 
 function viewMemo(memo) {
-  editedMemo2.value = memo;
+  editedMemo.value = memo;
+  editedMemo.value.isEdit = true
 }
 
-function addMemo2() {
+function addMemo() {
   memos.value.push({
     id: Date.now(),
     content: "新規メモ",
     title: "新規メモ",
+    isEdit: false
   });
-  saveMemos2(memos);
+  saveMemos(memos);
   viewMemo(memos.value[memos.value.length - 1]);
 }
 
-function saveMemos2(memos) {
+function saveMemos(memos) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(memos.value));
 }
 
 function saveEditedMemo(memo) {
-  const memoIds = memos.value.map((memo) => memo.id);
-  const index = memoIds.indexOf(memo.id);
-  memos.value[index].content = memo.content;
-  memos.value[index].title = memo.content.split("\n", 1)[0];
+  if (!memo.isEdit) {
+    return
+  }
+  if (memo.content === "") {
+    deleteMemo(memo)
+    return
+  }
+  memo.content.includes("\n") ? memo.title = memo.content.split("\n", 1)[0] :  memo.title = memo.content
+  memo.isEdit = false
+  const index = memos.value.indexOf(memo);
+  memos.value.splice(index, 1, memo)
   localStorage.setItem(STORAGE_KEY, JSON.stringify(memos.value));
-  editedMemo2.value = "";
+
 }
 
 function deleteMemo(memo) {
   const index = memos.value.indexOf(memo);
   if (index !== -1) {
     memos.value.splice(index, 1);
-    saveMemos2(memos);
+    saveMemos(memos);
   }
-  editedMemo2.value = {};
+  editedMemo.value = {};
 }
 
-function cancelEdit() {
-  editedMemo2.value = {};
-}
 </script>
 
 <template>
@@ -54,14 +60,14 @@ function cancelEdit() {
       <div class="memo_list">
         <ul>
           <li v-for="memo in memos" v-bind:key="memo.id">
-            <label class="memo" v-on:click="viewMemo(memo)">{{
+            <label class="memo" v-on:click="viewMemo(memo);">{{
               memo.title
             }}</label>
           </li>
           <li
             id="add_memo_text"
             style="list-style-type: none"
-            v-on:click="addMemo2()"
+            v-on:click="addMemo()"
           >
             +
           </li>
@@ -73,13 +79,12 @@ function cancelEdit() {
             cols="30"
             rows="3"
             class="text_area"
-            v-model="editedMemo2.content"
-            v-on:blur="cancelEdit(editedMemo2)"
+            v-model="editedMemo.content"
           ></textarea>
-          <button class="edit_button" v-on:click="saveEditedMemo(editedMemo2)">
+          <button class="edit_button" v-on:click="saveEditedMemo(editedMemo)">
             編集
           </button>
-          <button class="delete_button" v-on:click="deleteMemo(editedMemo2)">
+          <button class="delete_button" v-on:click="deleteMemo(editedMemo)">
             削除
           </button>
         </form>
