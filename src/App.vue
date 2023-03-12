@@ -8,7 +8,7 @@ let editedMemo = ref({});
 
 function viewMemo(memo) {
   editedMemo.value = memo;
-  editedMemo.value.isEdit = true
+  editedMemo.value.isEdit = true;
 }
 
 function addMemo() {
@@ -16,7 +16,7 @@ function addMemo() {
     id: Date.now(),
     content: "新規メモ",
     title: "新規メモ",
-    isEdit: false
+    isEdit: false,
   });
   saveMemos(memos);
   viewMemo(memos.value[memos.value.length - 1]);
@@ -28,18 +28,19 @@ function saveMemos(memos) {
 
 function saveEditedMemo(memo) {
   if (!memo.isEdit) {
-    return
+    return;
   }
   if (memo.content === "") {
-    deleteMemo(memo)
-    return
+    deleteMemo(memo);
+    return;
   }
-  memo.content.includes("\n") ? memo.title = memo.content.split("\n", 1)[0] :  memo.title = memo.content
-  memo.isEdit = false
+  memo.content.includes("\n")
+    ? (memo.title = memo.content.split("\n", 1)[0])
+    : (memo.title = memo.content);
+  memo.isEdit = false;
   const index = memos.value.indexOf(memo);
-  memos.value.splice(index, 1, memo)
+  memos.value.splice(index, 1, memo);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(memos.value));
-
 }
 
 function deleteMemo(memo) {
@@ -50,7 +51,6 @@ function deleteMemo(memo) {
   }
   editedMemo.value = {};
 }
-
 </script>
 
 <template>
@@ -60,7 +60,7 @@ function deleteMemo(memo) {
       <div class="memo_list">
         <ul>
           <li v-for="memo in memos" v-bind:key="memo.id">
-            <label class="memo" v-on:click="viewMemo(memo);">{{
+            <label class="memo" v-on:click="viewMemo(memo)">{{
               memo.title
             }}</label>
           </li>
