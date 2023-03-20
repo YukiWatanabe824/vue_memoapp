@@ -59,32 +59,32 @@ function deleteMemo(memo) {
     <div class="app">
       <div class="memo_list">
         <ul>
-          <li v-for="memo in memos" v-bind:key="memo.id">
-            <label class="memo clickable" v-on:click="viewMemo(memo)">{{
+          <li v-for="memo in memos" :key="memo.id">
+            <label class="memo clickable" @click="viewMemo(memo)">{{
               memo.title
             }}</label>
           </li>
           <li
             id="add_memo_text"
             style="list-style-type: none"
-            v-on:click="addMemo()"
+            @click="addMemo()"
           >
             +
           </li>
         </ul>
       </div>
       <div class="form_area">
-        <form v-on:submit.prevent>
+        <form @submit.prevent>
           <textarea
             cols="30"
             rows="3"
             class="text_area"
             v-model="editedMemo.content"
           ></textarea>
-          <button class="edit_button" v-on:click="saveEditedMemo(editedMemo)">
+          <button class="edit_button" @click="saveEditedMemo(editedMemo)">
             編集
           </button>
-          <button class="delete_button" v-on:click="deleteMemo(editedMemo)">
+          <button class="delete_button" @click="deleteMemo(editedMemo)">
             削除
           </button>
         </form>
