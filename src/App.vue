@@ -73,7 +73,7 @@ function deleteMemo(memo) {
           </li>
         </ul>
       </div>
-      <div class="form_area">
+      <div class="form_area" v-if="editedMemo.isEdit">
         <form @submit.prevent>
           <textarea
             cols="30"
@@ -95,6 +95,7 @@ function deleteMemo(memo) {
 
 <style scoped>
 #memo_app {
+  min-height: 250px;
   padding: 5px;
   width: 450px;
   border: 1px solid darkgray;
