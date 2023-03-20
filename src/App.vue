@@ -60,7 +60,7 @@ function deleteMemo(memo) {
       <div class="memo_list">
         <ul>
           <li v-for="memo in memos" v-bind:key="memo.id">
-            <label class="memo" v-on:click="viewMemo(memo)">{{
+            <label class="memo clickable" v-on:click="viewMemo(memo)">{{
               memo.title
             }}</label>
           </li>
@@ -95,7 +95,6 @@ function deleteMemo(memo) {
 
 <style scoped>
 #memo_app {
-  background-color: lightgoldenrodyellow;
   padding: 5px;
   width: 450px;
   border: 1px solid darkgray;
@@ -109,6 +108,9 @@ function deleteMemo(memo) {
   justify-content: space-between;
 }
 
+.clickable {
+  cursor: pointer
+}
 .memo_list {
   width: 150px;
 }
